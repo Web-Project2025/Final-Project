@@ -1,0 +1,762 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: #000000;
+    color: #ff3333;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Horizontal streaming characters with blur effect */
+.horizontal-stream {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    opacity: 0.5;
+}
+
+.stream-line {
+    position: absolute;
+    white-space: nowrap;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff3333;
+    letter-spacing: 3px;
+    will-change: transform;
+}
+
+/* Blur gradient from edges to center */
+.horizontal-stream::before,
+.horizontal-stream::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.horizontal-stream::before {
+    left: 0;
+    background: linear-gradient(to right, 
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        transparent 100%
+    );
+}
+
+.horizontal-stream::after {
+    right: 0;
+    background: linear-gradient(to left, 
+        rgba(0, 0, 0, 0.9) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        transparent 100%
+    );
+}
+
+/* Animation for horizontal movement */
+@keyframes streamHorizontal {
+    0% {
+        transform: translateX(-100%);
+        filter: blur(8px);
+        opacity: 0.3;
+    }
+    25% {
+        filter: blur(4px);
+        opacity: 0.6;
+    }
+    50% {
+        filter: blur(0px);
+        opacity: 1;
+    }
+    75% {
+        filter: blur(4px);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateX(200%);
+        filter: blur(8px);
+        opacity: 0.3;
+    }
+}
+
+.stream-line {
+    animation: streamHorizontal 25s linear infinite;
+}
+
+/* Stagger animation delays for multiple lines - negative delays to start mid-animation */
+.stream-line:nth-child(1) { animation-delay: -5s; }
+.stream-line:nth-child(2) { animation-delay: -8s; }
+.stream-line:nth-child(3) { animation-delay: -12s; }
+.stream-line:nth-child(4) { animation-delay: -15s; }
+.stream-line:nth-child(5) { animation-delay: -18s; }
+.stream-line:nth-child(6) { animation-delay: -22s; }
+.stream-line:nth-child(7) { animation-delay: -3s; }
+.stream-line:nth-child(8) { animation-delay: -10s; }
+
+.container {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 800px;
+    border: 2px solid #ff3333;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.9);
+    box-shadow: 0 0 30px rgba(255, 51, 51, 0.3),
+                inset 0 0 30px rgba(255, 51, 51, 0.1);
+    border-radius: 5px;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+    overflow: hidden;
+}
+
+.container.portal-active {
+    transform: scale(1.05);
+    box-shadow: 0 0 60px rgba(255, 51, 51, 0.6),
+                inset 0 0 60px rgba(255, 51, 51, 0.3);
+}
+
+/* Portal Background Effects */
+.portal-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.portal-background.active {
+    opacity: 1;
+}
+
+#networkCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.code-stream {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: #ff3333;
+    opacity: 0.3;
+    line-height: 1.2;
+}
+
+.code-line {
+    position: absolute;
+    white-space: nowrap;
+    animation: slideCode 3s linear;
+}
+
+@keyframes slideCode {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.5;
+    }
+    80% {
+        opacity: 0.5;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+.data-flow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.data-stream {
+    position: absolute;
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, transparent, #ff3333, transparent);
+    animation: flowData 2s linear infinite;
+}
+
+@keyframes flowData {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    to {
+        transform: translateY(200%);
+        opacity: 0;
+    }
+}
+
+.container {
+    animation: flicker 0.15s infinite;
+}
+
+.terminal-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ff3333;
+    position: relative;
+    z-index: 2;
+}
+
+.terminal-title {
+    font-size: 24px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 10px #ff3333;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #ff3333, 0 0 10px #ff3333;
+    }
+    to {
+        text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 30px #ff3333;
+    }
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin: 40px 0;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease-out;
+}
+
+.search-container.portal-zoom {
+    transform: scale(1.1);
+}
+
+.prompt {
+    color: #ff3333;
+    font-size: 18px;
+    margin-right: 10px;
+    text-shadow: 0 0 5px #ff3333;
+}
+
+.search-input {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: #ff3333;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    outline: none;
+    padding: 10px;
+    border-bottom: 2px solid #ff3333;
+    text-shadow: 0 0 5px #ff3333;
+    letter-spacing: 2px;
+    caret-color: transparent;
+    position: relative;
+}
+
+.search-input::placeholder {
+    color: #ff333366;
+}
+
+/* Character morphing effect */
+@keyframes charMorph {
+    0% {
+        opacity: 1;
+        transform: scale(1) rotateY(0deg);
+        filter: blur(0px);
+    }
+    25% {
+        opacity: 0.7;
+        transform: scale(1.2) rotateY(180deg);
+        filter: blur(2px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8) rotateY(360deg);
+        filter: blur(3px);
+    }
+    75% {
+        opacity: 0.8;
+        transform: scale(1.1) rotateY(540deg);
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotateY(720deg);
+        filter: blur(0px);
+    }
+}
+
+@keyframes textShimmer {
+    0%, 100% {
+        text-shadow: 0 0 5px #ff3333, 0 0 10px #ff3333;
+    }
+    50% {
+        text-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333, 0 0 30px #ff6666;
+    }
+}
+
+/* DNA strand effect */
+@keyframes dnaTransform {
+    0% {
+        letter-spacing: 2px;
+    }
+    50% {
+        letter-spacing: 4px;
+    }
+    100% {
+        letter-spacing: 2px;
+    }
+}
+
+.search-input.morphing {
+    animation: textShimmer 2s ease-in-out infinite, dnaTransform 3s ease-in-out infinite;
+}
+
+.cursor {
+    position: absolute;
+    left: 10px;
+    width: 2px;
+    height: 24px;
+    background-color: #ff3333;
+    animation: blink 1s step-end infinite;
+    box-shadow: 0 0 5px #ff3333;
+    transition: left 0.05s ease-out;
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+.message {
+    text-align: center;
+    font-size: 16px;
+    padding: 20px;
+    border: 1px solid #ff3333;
+    background-color: rgba(255, 51, 51, 0.1);
+    animation: fadeIn 0.5s ease-in;
+    margin-top: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.message.hidden {
+    display: none;
+}
+
+/* Begin Search Button */
+.begin-search-btn {
+    display: block;
+    margin: 30px auto 20px;
+    padding: 15px 40px;
+    background-color: transparent;
+    border: 2px solid #ff3333;
+    color: #ff3333;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
+}
+
+.begin-search-btn:hover {
+    background-color: rgba(255, 51, 51, 0.2);
+    box-shadow: 0 0 20px rgba(255, 51, 51, 0.6);
+    transform: scale(1.05);
+}
+
+.begin-search-btn:active {
+    transform: scale(0.98);
+}
+
+.begin-search-btn.hidden {
+    display: none;
+}
+
+/* Processing Status */
+.processing-status {
+    margin: 25px 0;
+    padding: 15px;
+    border: 1px solid rgba(255, 51, 51, 0.3);
+    background-color: rgba(255, 51, 51, 0.05);
+    border-radius: 5px;
+    position: relative;
+    z-index: 2;
+}
+
+.processing-bar {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 51, 51, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.processing-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff3333, #ff6666, #ff3333);
+    background-size: 200% 100%;
+    animation: progressGlow 2s linear infinite;
+    transition: width 0.3s ease-out;
+    box-shadow: 0 0 10px #ff3333;
+}
+
+@keyframes progressGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+#processingText {
+    font-size: 14px;
+    color: #ff6666;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+}
+
+.message.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.info-text {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.6;
+    position: relative;
+    z-index: 2;
+}
+
+.info-text p {
+    margin: 5px 0;
+}
+
+/* Scanline effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+    );
+    pointer-events: none;
+    z-index: 999;
+}
+
+/* Screen flicker effect */
+@keyframes flicker {
+    0% {
+        opacity: 0.97;
+    }
+    5% {
+        opacity: 0.95;
+    }
+    10% {
+        opacity: 0.98;
+    }
+    15% {
+        opacity: 0.96;
+    }
+    100% {
+        opacity: 0.97;
+    }
+}
+
+.container {
+    animation: flicker 0.15s infinite;
+}
+
+/* Character typing effect */
+@keyframes typeChar {
+    from {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.search-input {
+    position: relative;
+}
+
+/* Landing Page Styles */
+.landing-page {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+.landing-page.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.landing-content {
+    text-align: center;
+}
+
+.landing-text {
+    font-size: 36px;
+    color: #ff3333;
+    text-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333;
+    letter-spacing: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 60px;
+    min-height: 50px;
+}
+
+.landing-text::after {
+    content: '█';
+    animation: blink 1s step-end infinite;
+    margin-left: 5px;
+}
+
+.landing-prompt {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+}
+
+.landing-prompt.show {
+    opacity: 0.4;
+}
+
+.prompt-line1 {
+    font-size: 28px;
+    color: #ff3333;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px #ff3333;
+}
+
+.prompt-line2 {
+    font-size: 20px;
+    color: #ff3333;
+    text-shadow: 0 0 8px #ff3333;
+}
+
+/* Thought Process Styles */
+.thought-process {
+    margin-bottom: 20px;
+    min-height: 60px;
+    font-size: 14px;
+    color: #ff6666;
+    opacity: 0.7;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.6;
+    position: relative;
+    z-index: 2;
+}
+
+.thought-process .thought {
+    display: block;
+    margin: 5px 0;
+    animation: thoughtFlicker 0.3s ease-in-out;
+}
+
+@keyframes thoughtFlicker {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.3;
+        transform: translateX(2px);
+    }
+}
+
+.thought-process .thought::before {
+    content: '// ';
+    color: #ff3333;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Video Container */
+.video-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.video-container.hidden {
+    display: none;
+}
+
+.video-container.show {
+    display: flex;
+    animation: fadeInVideo 0.5s ease forwards;
+}
+
+.video-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+    will-change: transform;
+}
+
+/* Glitch Effect Overlay */
+.glitch-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    pointer-events: none;
+    background: transparent;
+}
+
+.glitch-overlay.active {
+    animation: glitchEffect 0.8s ease-out;
+}
+
+@keyframes glitchEffect {
+    0%, 100% {
+        background: transparent;
+        transform: translate(0);
+    }
+    20% {
+        background: rgba(255, 51, 51, 0.2);
+        transform: translate(-4px, 4px);
+    }
+    40% {
+        background: rgba(255, 51, 51, 0.3);
+        transform: translate(4px, -4px);
+        box-shadow: 0 0 40px rgba(255, 51, 51, 0.8);
+    }
+    60% {
+        background: rgba(255, 51, 51, 0.2);
+        transform: translate(-3px, 3px);
+    }
+    80% {
+        background: rgba(255, 51, 51, 0.3);
+        transform: translate(3px, -3px);
+    }
+}
+
+@keyframes fadeInVideo {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Screen flash effect */
+@keyframes screenFlash {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+.screen-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ff3333;
+    z-index: 9997;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.screen-flash.active {
+    animation: screenFlash 0.3s ease-out 3;
+}
+
+.container.show {
+    animation: fadeIn 1s ease-in;
+}
