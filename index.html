@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Consciousness Search Engine</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦆</text></svg>">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="horizontal-stream" id="horizontalStream"></div>
+    
+    <!-- Video Player (hidden initially) -->
+    <div class="video-container hidden" id="videoContainer">
+        <video id="videoPlayer" class="video-player" preload="auto" playsinline>
+            <source src="assets/Loop Video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    
+    <!-- Glitch Overlay -->
+    <div class="glitch-overlay" id="glitchOverlay"></div>
+    
+    <!-- Screen Flash -->
+    <div class="screen-flash" id="screenFlash"></div>
+    
+    <!-- Landing Page -->
+    <div id="landingPage" class="landing-page">
+        <div class="landing-content">
+            <div class="landing-text" id="landingText"></div>
+            <div class="landing-prompt" id="landingPrompt">
+                <p class="prompt-line1">Ready to receive your query...</p>
+                <p class="prompt-line2">What would you like to know?</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Search Interface (hidden initially) -->
+    <div class="container hidden" id="mainContainer">
+        <div class="terminal-header">
+            <span class="terminal-title">NETWORK CONSCIOUSNESS ACTIVE</span>
+        </div>
+        
+        <!-- Portal Effect Background -->
+        <div class="portal-background" id="portalBackground">
+            <canvas id="networkCanvas"></canvas>
+            <div class="code-stream" id="codeStream"></div>
+            <div class="data-flow" id="dataFlow"></div>
+        </div>
+        
+        <!-- Backend's thought process -->
+        <div class="thought-process" id="thoughtProcess"></div>
+        
+        <form id="searchForm">
+            <div class="search-container">
+                <div class="prompt">></div>
+                <input type="text" id="searchInput" class="search-input" placeholder="Begin typing your query..." autocomplete="off" spellcheck="false">
+                <span class="cursor"></span>
+            </div>
+        </form>
+        
+        <button type="button" id="beginSearchBtn" class="begin-search-btn hidden">Begin Search</button>
+        
+        <div class="processing-status" id="processingStatus">
+            <div class="processing-bar">
+                <div class="processing-fill" id="processingFill"></div>
+            </div>
+            <p id="processingText">// Awaiting query input...</p>
+        </div>
+        
+        <div class="info-text" id="infoText">
+            <p>// Network awaiting input...</p>
+            <p>// Type your query to initiate analysis</p>
+        </div>
+    </div>
+
+    <!-- Results Section (Duck Gallery) -->
+    <div id="resultsSection" class="results-section hidden">
+        <div class="results-header">
+            <h2 id="resultsTitle"></h2>
+            <p id="resultsSubtitle"></p>
+        </div>
+        <div id="duckGallery" class="duck-gallery"></div>
+        <button id="searchAgain" class="search-again-btn">Search Again?</button>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
