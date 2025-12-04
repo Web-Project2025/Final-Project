@@ -645,7 +645,7 @@ body {
 }
 
 .screen-flash.active {
-    animation: screenFlash 0.3s ease-out 3;
+    animation: screenFlash 1s ease-out 3;
 }
 
 @keyframes screenFlash {
@@ -806,11 +806,9 @@ body::before {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(-10px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 

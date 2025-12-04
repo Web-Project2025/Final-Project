@@ -374,6 +374,9 @@ async function handleSearch() {
         // Display instant check messages (quick)
         await displayInstantCheckMessages(instantCheckData.instantMessages);
         
+        // Add a pause after instant check completes
+        await sleep(2000);
+        
         // STAGE 2: DEEP CHECK (15 seconds with video and visual effects)
         const deepCheckResponse = await fetch('/api/deep-check', {
             method: 'POST',
@@ -441,6 +444,7 @@ async function handleSearch() {
 // Display instant check messages (quick analysis)
 async function displayInstantCheckMessages(messages) {
     for (let i = 0; i < messages.length; i++) {
+        console.log(`Displaying message ${i + 1}/${messages.length}: ${messages[i]}`);
         thoughtProcess.innerHTML = `<span class="thought">${messages[i]}</span>`;
         
         // Update processing bar
@@ -451,9 +455,12 @@ async function displayInstantCheckMessages(messages) {
         // Quick pulse effect
         pulsePortal();
         
-        // Very short delays for instant check
-        await sleep(300);
+        // 3 seconds between each message for readability
+        console.log('Waiting 3 seconds...');
+        await sleep(3000);
+        console.log('Wait complete');
     }
+    console.log('All instant check messages displayed');
 }
 
 // Display thinking messages from backend (legacy function, kept for compatibility)
@@ -494,6 +501,12 @@ async function performDeepCheckWithVideo(deepMessages) {
     const glitchOverlay = document.getElementById('glitchOverlay');
     const screenFlash = document.getElementById('screenFlash');
     const horizontalStream = document.getElementById('horizontalStream');
+    
+    // Randomly select between the two videos
+    const randomVideo = Math.random() < 0.5 ? 'Random Image1.mp4' : 'Random Image2.mp4';
+    const videoSource = videoPlayer.querySelector('source');
+    videoSource.src = `assets/${randomVideo}`;
+    videoPlayer.load(); // Reload the video with the new source
     
     return new Promise((resolve) => {
         // Hide horizontal stream and deactivate portal
@@ -601,11 +614,11 @@ function createFlyingText(text, container) {
     const textEl = document.createElement('div');
     textEl.textContent = text;
     textEl.style.position = 'absolute';
-    textEl.style.color = '#ff3333';
+    textEl.style.color = '#00d4ff';
     textEl.style.fontFamily = 'monospace';
     textEl.style.fontSize = `${32 + Math.random() * 24}px`;
     textEl.style.fontWeight = 'bold';
-    textEl.style.textShadow = '0 0 20px rgba(255, 51, 51, 1), 0 0 40px rgba(255, 51, 51, 0.6)';
+    textEl.style.textShadow = '0 0 20px rgba(0, 212, 255, 1), 0 0 40px rgba(0, 212, 255, 0.6)';
     textEl.style.whiteSpace = 'nowrap';
     textEl.style.opacity = '1';
     textEl.style.zIndex = '15';

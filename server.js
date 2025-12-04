@@ -287,11 +287,23 @@ function generateThinkingMessages(query) {
 function generateInstantCheckMessages(query) {
     const messages = [];
     const keywords = extractKeywords(query);
+    const questionType = detectQuestionType(query);
     
-    messages.push(`⚡ Instant scan initiated...`);
-    messages.push(`⚡ Parsing query structure...`);
-    messages.push(`⚡ Basic validation complete`);
-    messages.push(`⚡ Triggering deep analysis protocol...`);
+    messages.push(`⚡ Query received: "${query}"`);
+    
+    if (questionType !== 'general query') {
+        messages.push(`⚡ Detected ${questionType} question - analyzing intent...`);
+    } else {
+        messages.push(`⚡ Processing general query - extracting context...`);
+    }
+    
+    if (keywords.length > 0) {
+        messages.push(`⚡ Keywords identified: ${keywords.slice(0, 3).join(', ')}`);
+    } else {
+        messages.push(`⚡ Parsing query structure...`);
+    }
+    
+    messages.push(`⚡ Initial validation complete - escalating to deep analysis...`);
     
     return messages;
 }
