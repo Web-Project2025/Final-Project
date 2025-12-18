@@ -1,2 +1,3 @@
 This website is a playful search engine that pokes fun at how AI often tries to be helpful even when it doesn’t understand the question. Users can type in anything they want, but the system fails to grasp the request. Instead of giving a real answer—or admitting it doesn’t know—it responds with images of ducks meant to keep the user satisfied. The project uses this repeated failure as its main idea, showing how AI can prioritize pleasing responses over accuracy. By replacing information with ducks, the website highlights the gap between what users expect and what AI actually understands.
+
 Please find the project in the Master Branch
